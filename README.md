@@ -1,6 +1,6 @@
 # Databrick
-Explanation of %fs in Databricks
-The %fs magic command in Databricks is used to interact with the Databricks File System (DBFS). It provides a simple way to perform file system operations such as listing, creating, or deleting directories and files. %fs is a shorthand for File System operations.
+-Explanation of %fs in Databricks
+-The %fs magic command in Databricks is used to interact with the Databricks File System (DBFS). It provides a simple way to perform file system operations such as listing, creating, or deleting directories and files. %fs is a shorthand for File System operations.
 
 Common %fs Commands
 List Files

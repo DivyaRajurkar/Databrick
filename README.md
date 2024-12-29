@@ -107,6 +107,140 @@ dbutils.fs.mkdirs('/FileStore/tables/db2025batch/gold_layer')
 ```  
 
 This approach is cleaner and allows managing all directory creation in a single cell.  
+Here is the formatted content written in **GitHub README** markdown style:
+
+```markdown
+# Databricks `dbutils.fs` Operations
+
+This document provides examples of using `dbutils.fs` commands in Databricks for various file operations such as creating directories, writing files, reading content, copying files, and handling errors.
+
+---
+
+## 1. Create a Directory
+Use the `mkdirs` command to create a new directory.
+
+```python
+dbutils.fs.mkdirs('/FileStore/tables/db2025batch')
+```
+
+---
+
+## 2. Write a File
+Write content to a file using the `put` command.
+
+```python
+dbutils.fs.put('/FileStore/tables/db2025batch/sample.txt', "This is a sample file.")
+```
+
+---
+
+## 3. Read the File
+Read the content of a file using the `head` command.
+
+```python
+content = dbutils.fs.head('/FileStore/tables/db2025batch/sample.txt')
+print("File Content:", content)
+```
+
+---
+
+## 4. Copy the File
+Copy a file from one location to another using the `cp` command.
+
+```python
+# Create a backup directory
+dbutils.fs.mkdirs('/FileStore/tables/backup')
+
+# Copy the file
+dbutils.fs.cp('/FileStore/tables/db2025batch/sample.txt', '/FileStore/tables/backup/sample_copy.txt')
+```
+
+---
+
+## 5. Remove the Original File
+Remove a file using the `rm` command.
+
+```python
+dbutils.fs.rm('/FileStore/tables/db2025batch/sample.txt')
+```
+
+---
+
+## 6. Remove the Directory
+Delete directories and their contents recursively.
+
+```python
+dbutils.fs.rm('/FileStore/tables/db2025batch', True)
+dbutils.fs.rm('/FileStore/tables/backup', True)
+print("Cleanup completed!")
+```
+
+---
+
+## Reading Files with `head`
+
+### 1. Writing a Sample File
+Before using the `head` command, create a sample file:
+
+```python
+dbutils.fs.put("/FileStore/tables/example.txt", "Hello, Databricks! Welcome to file handling using dbutils.")
+print("File written successfully!")
+```
+
+---
+
+### 2. Reading File Content with `head`
+Use the `head` command to read the file content:
+
+```python
+content = dbutils.fs.head("/FileStore/tables/example.txt")
+print("File Content:", content)
+```
+
+**Output:**
+```
+File Content: Hello, Databricks! Welcome to file handling using dbutils.
+```
+
+---
+
+### 3. Reading Only the First Few Characters
+You can limit the number of characters read using the `maxBytes` parameter:
+
+```python
+content = dbutils.fs.head("/FileStore/tables/example.txt", maxBytes=20)
+print("Partial Content:", content)
+```
+
+**Output:**
+```
+Partial Content: Hello, Databricks! W
+```
+
+---
+
+## Error Handling
+If the file does not exist or the path is incorrect, you’ll get an error like:
+
+```
+java.io.FileNotFoundException: File /FileStore/tables/nonexistent.txt does not exist.
+```
+
+### Handling Missing Files
+Use a `try-except` block to handle missing files gracefully:
+
+```python
+try:
+    content = dbutils.fs.head("/FileStore/tables/nonexistent.txt")
+    print("File Content:", content)
+except Exception as e:
+    print("Error:", str(e))
+```
+
+This ensures smooth execution and handles missing file scenarios effectively.
+``` 
+
+This README-styled format is well-organized for GitHub and suitable for documenting your `dbutils.fs` operations.
 
 ### Handling Errors  
 

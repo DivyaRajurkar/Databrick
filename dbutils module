@@ -1,0 +1,231 @@
+The `dbutils` module is a utility library provided by Databricks for managing files, secrets, jobs, widgets, and other tasks. Below is a comprehensive list of important `dbutils` commands categorized by their functions:
+
+---
+
+### **1. File System Operations (`dbutils.fs`)**
+Used to interact with the Databricks File System (DBFS).
+
+- **`dbutils.fs.ls(path)`**: Lists files in the given path.
+- **`dbutils.fs.mkdirs(path)`**: Creates directories at the specified path.
+- **`dbutils.fs.rm(path, recurse)`**: Removes files or directories. Use `recurse=True` for recursive deletion.
+- **`dbutils.fs.cp(source, destination, recurse)`**: Copies files from the source to the destination. Use `recurse=True` for recursive copying.
+- **`dbutils.fs.mv(source, destination)`**: Moves files from the source to the destination.
+- **`dbutils.fs.head(path, max_bytes)`**: Displays the first few bytes of a file (default 65536 bytes).
+- **`dbutils.fs.put(path, contents, overwrite)`**: Creates or overwrites a file with the given contents.
+
+---
+
+### **2. Secrets Management (`dbutils.secrets`)**
+Used to manage secrets securely.
+
+- **`dbutils.secrets.list(scope)`**: Lists all secrets in the given scope.
+- **`dbutils.secrets.listScopes()`**: Lists all available secret scopes.
+- **`dbutils.secrets.get(scope, key)`**: Retrieves the value of a secret for the given key in the specified scope.
+- **`dbutils.secrets.getBytes(scope, key)`**: Retrieves a secret value as bytes.
+
+---
+
+### **3. Widgets for Parameterization (`dbutils.widgets`)**
+Used to create, manage, and retrieve widgets for notebooks.
+
+- **`dbutils.widgets.text(name, default, label)`**: Creates a text input widget.
+- **`dbutils.widgets.dropdown(name, default, choices, label)`**: Creates a dropdown widget.
+- **`dbutils.widgets.combobox(name, default, choices, label)`**: Creates a combobox widget.
+- **`dbutils.widgets.multiselect(name, default, choices, label)`**: Creates a multiselect widget.
+- **`dbutils.widgets.remove(name)`**: Removes a specific widget.
+- **`dbutils.widgets.removeAll()`**: Removes all widgets.
+- **`dbutils.widgets.get(name)`**: Retrieves the current value of a widget.
+
+---
+
+### **4. Notebook Utilities (`dbutils.notebook`)**
+Used for chaining and running notebooks.
+
+- **`dbutils.notebook.run(notebook_path, timeout_seconds, arguments)`**: Runs a notebook and returns its output.
+- **`dbutils.notebook.exit(value)`**: Exits the current notebook with the given value.
+
+---
+
+### **5. Jobs Utilities (`dbutils.jobs`)**
+Used for interacting with jobs in Databricks.
+
+- **`dbutils.jobs.taskValues.set(key, value)`**: Sets a key-value pair for task values.
+- **`dbutils.jobs.taskValues.get(key, default)`**: Retrieves the value of a specified key for task values.
+- **`dbutils.jobs.taskValues.getAll()`**: Retrieves all task values.
+
+---
+
+### **6. Utilities Information (`dbutils.library`)**
+Used to manage libraries.
+
+- **`dbutils.library.install(library_name)`**: Installs a library.
+- **`dbutils.library.installPyPI(package, repo, extras)`**: Installs a Python package from PyPI.
+- **`dbutils.library.restartPython()`**: Restarts the Python process for library changes.
+- **`dbutils.library.list()`**: Lists all installed libraries.
+
+---
+
+### **7. Utilities Versioning (`dbutils`)**
+Used to retrieve the version of `dbutils`.
+
+- **`dbutils.help()`**: Displays help for `dbutils`.
+- **`dbutils.fs.help()`**: Displays help for filesystem utilities.
+- **`dbutils.secrets.help()`**: Displays help for secret utilities.
+
+---
+
+These commands cover most common use cases in Databricks workflows. Let me know if you'd like examples or specific scenarios for using any of these commands!
+
+Here’s a detailed explanation of some commonly used `dbutils` commands with examples:
+
+---
+
+### **1. File System Operations (`dbutils.fs`)**
+
+#### **Command: `dbutils.fs.ls(path)`**
+Lists files and directories in the given path.
+
+**Example:**
+```python
+files = dbutils.fs.ls("/databricks-datasets")
+for file in files:
+    print(file.name)
+```
+**Explanation:**
+- Lists all files and directories in the `/databricks-datasets` folder.
+- Prints the name of each file or folder.
+
+---
+
+#### **Command: `dbutils.fs.put(path, contents, overwrite)`**
+Creates or overwrites a file with the specified content.
+
+**Example:**
+```python
+dbutils.fs.put("/tmp/sample.txt", "Hello, Databricks!", overwrite=True)
+```
+**Explanation:**
+- Creates a file named `sample.txt` in the `/tmp` directory with the content `Hello, Databricks!`.
+- The `overwrite=True` parameter allows overwriting the file if it already exists.
+
+---
+
+#### **Command: `dbutils.fs.rm(path, recurse)`**
+Removes files or directories.
+
+**Example:**
+```python
+dbutils.fs.rm("/tmp/sample.txt", recurse=False)
+```
+**Explanation:**
+- Deletes the `sample.txt` file from the `/tmp` directory.
+- The `recurse` parameter is set to `False` to ensure non-recursive deletion.
+
+---
+
+### **2. Secrets Management (`dbutils.secrets`)**
+
+#### **Command: `dbutils.secrets.get(scope, key)`**
+Retrieves the value of a secret.
+
+**Example:**
+```python
+api_key = dbutils.secrets.get(scope="my-scope", key="api-key")
+print(api_key)  # Avoid printing sensitive information in production
+```
+**Explanation:**
+- Fetches the value of the secret `api-key` from the secret scope `my-scope`.
+- Useful for securely accessing sensitive information like API keys or credentials.
+
+---
+
+### **3. Widgets for Parameterization (`dbutils.widgets`)**
+
+#### **Command: `dbutils.widgets.text(name, default, label)`**
+Creates a text input widget.
+
+**Example:**
+```python
+dbutils.widgets.text("username", "default_user", "Enter your username")
+username = dbutils.widgets.get("username")
+print(f"Username: {username}")
+```
+**Explanation:**
+- Creates a widget named `username` with a default value of `default_user`.
+- The user can input a custom value, and the script retrieves it using `dbutils.widgets.get()`.
+
+---
+
+#### **Command: `dbutils.widgets.remove(name)`**
+Removes a specific widget.
+
+**Example:**
+```python
+dbutils.widgets.remove("username")
+```
+**Explanation:**
+- Removes the widget named `username`.
+- Useful for cleaning up widgets after use.
+
+---
+
+### **4. Notebook Utilities (`dbutils.notebook`)**
+
+#### **Command: `dbutils.notebook.run()`**
+Runs another notebook.
+
+**Example:**
+```python
+result = dbutils.notebook.run("/Users/username/other_notebook", 60, {"param1": "value1"})
+print(result)
+```
+**Explanation:**
+- Runs the notebook located at `/Users/username/other_notebook` with a timeout of 60 seconds.
+- Passes `param1` with the value `value1` as an argument to the notebook.
+- Returns the result of the notebook execution.
+
+---
+
+### **5. Jobs Utilities (`dbutils.jobs`)**
+
+#### **Command: `dbutils.jobs.taskValues.set(key, value)`**
+Stores task-specific values.
+
+**Example:**
+```python
+dbutils.jobs.taskValues.set("output_path", "/tmp/output")
+```
+**Explanation:**
+- Saves the value `/tmp/output` under the key `output_path`.
+- Task values can be retrieved by downstream tasks in a multi-task job.
+
+#### **Command: `dbutils.jobs.taskValues.get(key, default)`**
+Retrieves task-specific values.
+
+**Example:**
+```python
+output_path = dbutils.jobs.taskValues.get("output_path", "/default/path")
+print(output_path)
+```
+**Explanation:**
+- Retrieves the value stored under `output_path`.
+- If the key doesn’t exist, it returns `/default/path`.
+
+---
+
+### **6. Utilities Versioning (`dbutils.help`)**
+
+#### **Command: `dbutils.help()`**
+Displays help for `dbutils`.
+
+**Example:**
+```python
+dbutils.help()
+```
+**Explanation:**
+- Displays a list of all available `dbutils` commands and their descriptions.
+- Useful for discovering new commands and their usage.
+
+---
+
+Let me know which command you’d like to explore further!
